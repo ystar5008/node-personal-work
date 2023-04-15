@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 //goodsRouter 변수안에 goods.js를 가져옴
 const goodsRouter = require('./routes/goods')
+const cartsRouter = require("./routes/carts")
 
 const connect = require("./schemas")
 //index.js에서 connect 함수 모듈로 가져와서 실행
@@ -31,7 +32,7 @@ app.use(express.json())
 //api라는 경로가 추가되면 모두 goodsRouter로 가라는 의미
 //localhost:3000/api => goodsRouter로 이동
 // app.use("/api", [goodsRouter, userRouter, adminRouter]); 처럼 배열로 라우터를 사용할 수 있다.
-app.use("/api", [goodsRouter]);
+app.use("/api", [goodsRouter, cartsRouter]);
 
 //3000번 포트에서 app.js실행
 app.listen(port, () => {
