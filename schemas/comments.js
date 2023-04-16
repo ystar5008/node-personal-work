@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 
 //스키마 내용 정의
-const cartSchema = new mongoose.Schema({
+const commentsSchema = new mongoose.Schema({
     goodsId: {
         type: Number,
         required: true,
@@ -16,4 +16,4 @@ const cartSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("Cart", cartSchema);
+module.exports = mongoose.model("Commnets", commentsSchema);
