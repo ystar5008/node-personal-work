@@ -3,16 +3,23 @@ const mongoose = require("mongoose");
 
 //스키마 내용 정의
 const commentsSchema = new mongoose.Schema({
-    goodsId: {
-        type: Number,
+    commentId: {
+        type: String,
         required: true,
-        unique: true
     },
-    quantity: {
+    user: {
         type: Number,
         required: true,
-
-    }
+    },
+    content: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now, // 기본값
+        //autoincreament
+    },
 
 });
 
