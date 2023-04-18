@@ -1,0 +1,28 @@
+{
+  "name": "personal-work",
+  "version": "1.0.0",
+  "description": "노드과제 시작",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ystar5008/node-personal-work.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ystar5008/node-personal-work/issues"
+  },
+  "homepage": "https://github.com/ystar5008/node-personal-work#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3"
+  },
+  "type": "commonjs"
+}
