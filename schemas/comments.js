@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-
+const Schema = mongoose.Schema;  // 추가
 //스키마 내용 정의
-const commentsSchema = new mongoose.Schema({
-    commentId: {
+const commentsSchema = new Schema({
+    user: {
         type: String,
         required: true,
     },
-    user: {
+    password: {
         type: Number,
         required: true,
     },
@@ -23,4 +23,4 @@ const commentsSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("Commnets", commentsSchema);
+module.exports = mongoose.model("Comments", commentsSchema);
