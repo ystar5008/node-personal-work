@@ -27,5 +27,5 @@ const postsSchema = new Schema({  // 수정
 
 });
 
-
+//1
 module.exports = mongoose.model("Posts", postsSchema);
