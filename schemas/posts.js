@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;  // 추가
 //스키마 내용 정의
 const postsSchema = new Schema({  // 수정
-    user: {
+    userId: {
         type: String,
         required: true,
     },
-    password: {
-        type: Number,
+    nickname: {
+        type: String,
         required: true,
     },
     title: {
@@ -24,6 +24,10 @@ const postsSchema = new Schema({  // 수정
         default: Date.now, // 기본값
         //autoincreament
     },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    }
 
 });
 

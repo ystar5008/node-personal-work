@@ -1,44 +1,60 @@
 const express = require("express")
 const router = express.Router()
 const Posts = require("../schemas/posts.js")
-
+const User = require("../schemas/user.js")
+const authMiddleware = require("../middleware/auth-middleware.js")
 
 //1. 게시글 작성 api
-router.post("/posts", async (req, res) => {
+router.post("/posts", authMiddleware, async (req, res) => {
     //입력받은 데이터 값을 req.body에 저장
-    const { user, password, title, content, createdAt } = req.body
-    // 에러 처리
+    const { userId, nickname } = res.locals.user
+    const { title, content, createdAt } = req.body
+    //에러 처리
     try {
         //몽고db에 생성할 스키마
-        const createdPosts = await Posts.create({ user, password, title, createdAt, content })
-        res.status(200).json({ "message": "게시글을 생성하였습니다." })
-    } catch (error) {
-        // 클라이언트가 요청한 데이터가 없을 때
-        if ((!user || !password || !title || !content) || null) {
-            res.status(400).json({ message: "요청한 데이터가 없습니다." })
-        } else {
-            res.status(500).json({ message: "서버 에러가 발생했습니다." })
+        const createdPosts = await Posts.create({ userId, nickname, title, content, createdAt })
+        const isExisttitle = Object.keys(req.body).includes('title')
+        const isExistcontent = Object.keys(req.body).includes('content')
+        //412 body 데이터가 정상적으로 전달되지 않는 경우
+        if (!title || !content) {
+            console.log(1)
+            res.status(412).json({ "errorMessage": "데이터 형식이 올바르지 않습니다." })
+            return
         }
+        if (typeof title !== 'string' || typeof content !== 'string') {
+            console.log(1)
+            res.status(412).json({ "errorMessage": "데이터 형식이 올바르지 않습니다." })
+            return
+        }
+        //# 412 Title의 형식이 비정상적인 경우
+        if (!isExisttitle) {
+            console.log(2)
+            res.status(412).json({ "errorMessage": "게시글 제목의 형식이 일치하지 않습니다." })
+            return
+        }
+        // # 412 Content의 형식이 비정상적인 경우
+        if (!isExistcontent) {
+            console.log(3)
+            res.status(412).json({ "errorMessage": "게시글 내용의 형식이 일치하지 않습니다." })
+            return
+        }
+        return res.status(201).json({ "message": "게시글 작성에 성공하였습니다." })
+    } catch (error) {
+        // 400 예외 케이스에서 처리하지 못한 에러
+        console.log(4)
+        res.status(400).json({ "errorMessage": "게시글 작성에 실패하였습니다." })
+
     }
 })
 
 //2. 게시글 조회 api
 router.get('/posts', async (req, res) => {
-    const _data = await Posts.find({}, { content: 0 }).sort({ createdAt: 1 })
-    //_id => postId
-    const data = _data.map((item) => {
-        return {
-            postId: item._id,
-            user: item.user,
-            password: item.password,
-            title: item.title,
-            content: item.content,
-            createdAt: item.createdAt,
-            _id: undefined
-        };
-    });
-
-    res.json({ data })
+    const data = await Posts.find({}).sort({ createdAt: 1 })
+    const _data = Posts.map((item) => {
+        return item._id;
+    })
+    console.log(data)
+    res.json({ posts: data })
 })
 
 //3. 게시글 상세 조회
@@ -109,6 +125,7 @@ router.delete("/posts/:_postId", async (req, res) => {
             res.status(400).json({ message: '비밀 번호가 일치하지 않습니다.' })
         }
         else if (Number(password) === post.password) {
+
             await Posts.deleteOne({ _id: _postId })
             res.status(200).json({ "message": "게시글을 삭제하였습니다." })
         }
@@ -122,4 +139,46 @@ router.delete("/posts/:_postId", async (req, res) => {
 })
 
 
+
+router.get("/user", async (req, res) => {
+    const result = await User.find({})
+    const _result = result.map((item) => {
+        return {
+            userId: item._id,
+            name: item.name,
+            ID: item.ID,
+            pw: item.pw,
+            _id: undefined
+        }
+    })
+    try {
+        res.status(200).json({ "result": _result })
+    } catch (err) {
+        res.status(400).json({ message: "회원 목록 조회 실패" })
+    }
+})
+
+router.get("/user/:userid", async (req, res) => {
+    const { userid } = req.params
+    const result = await User.findById({ _id: userid })
+    const _result = result.map((item) => {
+        return {
+            userId: item._id,
+            name: item.name,
+            ID: item.ID,
+            pw: item.pw,
+            _id: undefined
+        }
+    })
+    try {
+        res.status(200).json({ "result": [_result] })
+    } catch (err) {
+        res.status(400).json({ message: "회원 상세 조회 실패" })
+    }
+})
+
 module.exports = router;
+
+
+
+
