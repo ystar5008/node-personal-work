@@ -11,14 +11,13 @@ function isValidNickname(nickname) {
 
 //1. 회원가입 API
 router.post('/signup', async (req, res) => {
-    const { nickname, password, confirmPassword } = req.body
+    const { nickname, password, confirm } = req.body
     try {
         // 1.닉네임 형식이 비정상적인 경우
         if (nickname.length < 4 || (isValidNickname(nickname) == false)) {
             res.status(412).json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." })
             return
         }
-
         // 2. 닉네임이 중복된 경우
         const isExistNickname = await User.findOne({ nickname })
         // 닉네임이 일치할때 조회함
@@ -38,7 +37,7 @@ router.post('/signup', async (req, res) => {
         }
 
         //4. password가 일치하지 않는 경우
-        if (password !== confirmPassword) {
+        if (password !== confirm) {
             res.status(412).json({ "errorMessage": "패스워드가 일치하지 않습니다.", })
             return
         }
