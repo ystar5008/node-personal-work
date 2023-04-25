@@ -1,5 +1,7 @@
-const jwt = require("jsonwebtoken")
-const User = require("../schemas/user")
+// middlewares/auth-middleware.js
+
+const jwt = require("jsonwebtoken");
+const { Users } = require("../models");
 
 module.exports = async (req, res, next) => {
     const { Authorization } = req.cookies;
@@ -10,7 +12,7 @@ module.exports = async (req, res, next) => {
             return res.status(403).json({ errorMessage: "전달된 쿠키에서 오류가 발생하였습니다." });
         }
         const { userId } = jwt.verify(authToken, "customized secret key")
-        const user = await User.findById(userId)
+        const user = await Users.findOne({ where: { userId } })
         res.locals.user = user;
         next();
     } catch (err) {
@@ -20,32 +22,3 @@ module.exports = async (req, res, next) => {
         return;
     }
 };
-
-// try {
-//     const { Authorization } = req.cookies;
-//     const [authType, authToken] = (Authorization ?? '').split(' ');
-
-//     if (!authToken || authType !== 'Bearer') {
-//       return res.status(401).json({
-//         errorMessage: 'Invalid or missing token',
-//       });
-//     }
-
-//     const decodedToken = jwt.verify(authToken, 'customized secret key');
-//     const user = await User.findById(decodedToken.userId);
-
-//     if (!user) {
-//       return res.status(401).json({
-//         errorMessage: 'Invalid user ID',
-//       });
-//     }
-
-//     res.locals.user = user;
-//     next();
-//   } catch (err) {
-//     console.error(err);
-//     return res.status(401).json({
-//       errorMessage: 'Invalid or missing token',
-//     });
-//   }
-// };
