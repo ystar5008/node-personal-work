@@ -5,9 +5,10 @@ const jwt = require("jsonwebtoken")
 
 router.post("/login", async (req, res) => {
     const { nickname, password } = req.body
-    const user = await Users.findOne({ where: { nickname } })
+
     //에러처리
     try {
+        const user = await Users.findOne({ where: { nickname } })
         // #412 해당하는 유저가 존재하지 않는 경우
         if (!user || user.password !== password) {
             res.status(412).json({ "errorMessage": "닉네임 또는 패스워드를 확인해주세요." })
