@@ -2,22 +2,30 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    //await queryInterface.renameColumn(테이블명, 컬럼 이름 변경 전 , 컬럼 이름 변경 후 )
-    await queryInterface.createTable('Users', {
-      userId: {
+    await queryInterface.createTable('Likes', {
+      likeId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      nickname: {
-        type: Sequelize.STRING,
+      PostId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true,
+        references: {
+          model: 'Posts',
+          key: 'postId',
+        },
+        onDelete: 'cascade',
       },
-      password: {
-        type: Sequelize.STRING,
+      UserId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+        onDelete: 'cascade',
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('likes');
   }
 };

@@ -3,6 +3,7 @@
 const jwt = require("jsonwebtoken");
 const { Users } = require("../models");
 
+
 module.exports = async (req, res, next) => {
     const { Authorization } = req.cookies;
     const [authType, authToken] = (Authorization ?? "").split(" ");
@@ -29,3 +30,5 @@ module.exports = async (req, res, next) => {
 
     }
 };
+
+

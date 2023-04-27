@@ -1,44 +1,53 @@
 'use strict';
-const { Model } = require('sequelize');
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Users extends Model {
+  class Comments extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Posts, {
-        sourceKey: 'userId',
+      this.belongsTo(models.Users, {
+        targetKey: 'userId',
         foreignKey: 'UserId',
+        onDelete: 'CASCADE',
       });
-      this.hasMany(models.Likes, {
-        sourceKey: 'userId',
-        foreignKey: 'UserId',
+      this.belongsTo(models.Posts, {
+        targetKey: 'postId',
+        foreignKey: 'PostId',
+        onDelete: 'CASCADE',
       });
-      this.hasMany(models.Comments, {
-        sourceKey: 'userId',
-        foreignKey: 'UserId',
-      });
+
     }
   }
-
-  Users.init(
+  Comments.init(
     {
-      userId: {
+      commentId: {
         allowNull: false, // NOT NULL
         autoIncrement: true, // AUTO_INCREMENT
         primaryKey: true, // Primary Key (기본키)
         type: DataTypes.INTEGER,
+      },
+      PostId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      UserId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       nickname: {
         allowNull: false, // NOT NULL
         type: DataTypes.STRING,
         unique: true,
       },
-      password: {
+      comment: {
         allowNull: false, // NOT NULL
         type: DataTypes.STRING,
+        unique: true,
       },
       createdAt: {
         allowNull: false, // NOT NULL
@@ -50,14 +59,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
-    },
-    {
-      sequelize,
-      modelName: 'Users',
-    }
-  );
-  return Users;
+    }, {
+    sequelize,
+    modelName: 'Comments',
+  });
+  return Comments;
 };
-
-
-
