@@ -7,7 +7,7 @@ class AuthService {
 
     signupB = async (nickname, password) => {
         await this.authRepository.signupC(nickname, password)
-        return res.status(201).json({ "message": "회원 가입에 성공하였습니다." })
+        return ({ "message": "회원 가입에 성공하였습니다." })
     }
 
     loginB = async (nickname) => {
@@ -21,9 +21,6 @@ class AuthService {
         const findIdDb = await this.authRepository.loginC(nickname)
         return findIdDb
     }
-
-
-
 }
 
 module.exports = AuthService

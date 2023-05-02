@@ -9,9 +9,10 @@ class PostsController {
 
         try {
             //posts에 받아온 데이터 참조
-            const posts = await postService.getB();
+            const posts = await this.postService.getB();
             return res.status(200).json({ posts: posts });
         } catch (err) {
+            console.log(err)
             // 400 예외 케이스에서 처리하지 못한 에러
             res.status(400).json({ "errorMessage": "게시글 조회에 실패하였습니다." })
         }
@@ -22,6 +23,7 @@ class PostsController {
 
         const { userId, nickname } = res.locals.user
         const { title, content } = req.body
+
         //에러 처리
         try {
             //412 body 데이터가 정상적으로 전달되지 않는 경우
@@ -40,7 +42,7 @@ class PostsController {
                 return
             }
             //postService에 있는 createPost메서드 실행 데이터를 인자로 넘겨줌
-            const createPostData = await this.postService.postB(nickname, userId, title, content);
+            const createPostData = await this.postService.postB(userId, nickname, title, content);
             return res.status(201).json({ "message": "게시글 작성에 성공하였습니다." }
             )
         } catch (error) {

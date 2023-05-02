@@ -11,7 +11,7 @@ class AuthRepository {
     }
 
     loginC = async (nickname) => {
-        const findId = await Users.finOne({
+        const findId = await Users.findOne({
             where: { nickname: nickname }
         })
         return findId

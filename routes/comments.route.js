@@ -15,6 +15,6 @@ router.get("/:postId/comments", authMiddleware, commentController.getA)
 router.put("/:postId/comments/:commentId", authMiddleware, commentController.putA)
 
 //9. 댓글 삭제 api
-router.delete("/:postId/comments/:commentId", authMiddleware, commentController.deleteA)
+router.delete("/:postId/comments/:commentId", authMiddleware, commentController.getA)
 
 module.exports = router

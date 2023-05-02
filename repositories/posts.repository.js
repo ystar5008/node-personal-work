@@ -13,9 +13,9 @@ class PostRepository {
 
     }
 
-    postC = async (nickname, userId, title, content) => {
+    postC = async (userId, nickname, title, content) => {
         // ORM인 Sequelize에서 Posts 모델의 create 메소드를 사용해 데이터를 요청합니다.
-        const createPostData = await Posts.create({ nickname, userId, title, content });
+        const createPostData = await Posts.create({ UserId: userId, nickname, title, content });
 
         return createPostData;
     }

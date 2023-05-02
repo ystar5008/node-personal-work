@@ -49,6 +49,7 @@ class AuthController {
             return res.status(200).json(signupData);
         } catch (err) {
             // 5. 400 예외 케이스에서 처리하지 못한 에러
+            console.log(err)
             res.status(400).json({ "errorMessage": "요청한 데이터 형식이 올바르지 않습니다." })
         }
 
